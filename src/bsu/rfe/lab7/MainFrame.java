@@ -192,7 +192,14 @@ public class MainFrame extends JFrame {
             }
         }).start();
     }
-
+    public boolean checkString(String string) {
+        try {
+            Integer.parseInt(string);
+        } catch (Exception e) {
+            return true;
+        }
+        return false;
+    }
     private void sendMessage() {
         try {
             // Получаем необходимые параметры
@@ -212,7 +219,26 @@ public class MainFrame extends JFrame {
                 return;
             }
 
+            String[] tokens = destinationAddress.split("\\.");
+            if (tokens.length != 4) {
+                JOptionPane.showMessageDialog(this,             "Адрес узла-получателя введен некорректно", "Ошибка",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            for (String str : tokens) {
+                if(checkString(str)){
+                    JOptionPane.showMessageDialog(this,             "Адрес узла-получателя введен некорректно", "Ошибка",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                int i = Integer.parseInt(str);
 
+                if ((i < 0) || (i > 255)) {
+                    JOptionPane.showMessageDialog(this,             "Адрес узла-получателя введен некорректно", "Ошибка",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
             if (message.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
                         "Введите текст сообщения", "Ошибка",
